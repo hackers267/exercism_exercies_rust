@@ -31,7 +31,5 @@ fn div_mod(dividend: i16, divisor: i16) -> (i16, i16) {
 }
 
 fn evens<T>(iter: impl Iterator<Item=T>) -> impl Iterator<Item=T> {
-    iter.enumerate()
-        .filter(|(i, _)| i % 2 == 0)
-        .map(|(_, v)| v)
+    iter.step_by(2)
 }
