@@ -30,6 +30,6 @@ fn div_mod(dividend: i16, divisor: i16) -> (i16, i16) {
     (dividend / divisor, dividend % divisor)
 }
 
-fn evens<T>(iter: impl Iterator<Item=T>) -> impl Iterator<Item=T> {
+fn evens<T>(iter: impl Iterator<Item = T>) -> impl Iterator<Item = T> {
     iter.step_by(2)
 }

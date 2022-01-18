@@ -1,4 +1,5 @@
 mod low_power_game;
+mod struct_logs;
 
 #[cfg(test)]
 mod tests {

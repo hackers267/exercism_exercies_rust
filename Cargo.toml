@@ -1,3 +1,7 @@
+[workspace]
+
+members = []
+
 [package]
 name = "exercism_exercies"
 version = "0.1.0"
