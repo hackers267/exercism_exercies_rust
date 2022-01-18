@@ -56,15 +56,3 @@ pub enum Comparison {
     Superlist,
     Unequal,
 }
-
-pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Comparison {
-    if _first_list.eq(_second_list) {
-        Comparison::Equal
-    } else if _first_list.contains(_second_list) {
-        Comparison::Superlist
-    } else if _second_list.contains(_first_list) {
-        Comparison::Sublist
-    } else {
-        Comparison::Unequal
-    }
-}
