@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -40,6 +42,42 @@ mod test {
         let new_player = alive_player.revive();
         assert!(new_player.is_none());
     }
+
+    #[test]
+    fn test_not_wizard_yet() {
+        let mut not_a_wizard_yet = Player {
+            health: 79,
+            mana: None,
+            level: 9,
+        };
+        assert_eq!(not_a_wizard_yet.cast_spell(5), 0);
+        assert_eq!(not_a_wizard_yet.health, 74);
+        assert_eq!(not_a_wizard_yet.mana, None);
+    }
+
+    #[test]
+    fn test_low_mana_wizard() {
+        let mut low_mana_wizard = Player {
+            health: 93,
+            mana: Some(3),
+            level: 12,
+        };
+        assert_eq!(low_mana_wizard.cast_spell(10), 0);
+        assert_eq!(low_mana_wizard.health, 93);
+        assert_eq!(low_mana_wizard.mana, Some(3));
+    }
+
+    #[test]
+    fn test_wizard() {
+        let mut wizard = Player {
+            health: 123,
+            mana: Some(30),
+            level: 18,
+        };
+        assert_eq!(wizard.cast_spell(10), 20);
+        assert_eq!(wizard.health, 123);
+        assert_eq!(wizard.mana, Some(20));
+    }
 }
 
 struct Player {
@@ -52,7 +90,7 @@ impl Player {
     fn revive(&self) -> Option<Player> {
         if self.health > 0 {
             None
-        } else if self.level > 10 {
+        } else if self.level >= 10 {
             Some(Player {
                 health: 100,
                 mana: Some(100),
@@ -64,6 +102,27 @@ impl Player {
                 mana: None,
                 level: self.level,
             })
+        }
+    }
+
+    fn cast_spell(&mut self, mana_cost: u32) -> u32 {
+        match self.mana {
+            None => {
+                match self.health.cmp(&mana_cost) {
+                    Ordering::Less => self.health = 0,
+                    _ => {
+                        self.health = self.health - mana_cost;
+                    }
+                }
+                0
+            }
+            Some(value) => match value.cmp(&mana_cost) {
+                Ordering::Less => 0,
+                _ => {
+                    self.mana = Some(value - mana_cost);
+                    &mana_cost * 2
+                }
+            },
         }
     }
 }
