@@ -1,6 +1,7 @@
-mod low_power_game;
-mod struct_logs;
 mod health_statistic;
+mod low_power_game;
+mod role_playing_game;
+mod struct_logs;
 
 #[cfg(test)]
 mod tests {
