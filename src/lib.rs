@@ -1,3 +1,4 @@
+mod clock;
 mod health_statistic;
 mod low_power_game;
 mod role_playing_game;
