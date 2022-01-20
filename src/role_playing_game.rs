@@ -87,21 +87,19 @@ struct Player {
 }
 
 impl Player {
+    fn new(level: u32) -> Player {
+        Player {
+            health: 100,
+            mana: if level < 10 { None } else { Some(100) },
+            level,
+        }
+    }
+
     fn revive(&self) -> Option<Player> {
         if self.health > 0 {
             None
-        } else if self.level >= 10 {
-            Some(Player {
-                health: 100,
-                mana: Some(100),
-                level: self.level,
-            })
         } else {
-            Some(Player {
-                health: 100,
-                mana: None,
-                level: self.level,
-            })
+            Some(Player::new(self.level))
         }
     }
 
