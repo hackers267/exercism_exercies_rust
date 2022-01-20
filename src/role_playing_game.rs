@@ -96,10 +96,9 @@ impl Player {
     }
 
     fn revive(&self) -> Option<Player> {
-        if self.health > 0 {
-            None
-        } else {
-            Some(Player::new(self.level))
+        match self.health {
+            0 => Some(Player::new(self.level)),
+            _ => None,
         }
     }
 
