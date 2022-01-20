@@ -28,6 +28,10 @@ mod test {
     fn test_hour_rolls_over_continuously() {
         assert_eq!(Clock::new(100, 0).to_string(), "04:00");
     }
+    #[test]
+    fn test_sixty_minutes_is_next_hour() {
+        assert_eq!(Clock::new(1, 60).to_string(), "02:00");
+    }
 }
 
 pub struct Clock {
@@ -37,9 +41,12 @@ pub struct Clock {
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
+        let (hour, minutes) = div_mod(minutes, 60);
         let (_, hours) = div_mod(hours, 24);
-        let (_, minutes) = div_mod(minutes, 60);
-        Clock { hours, minutes }
+        Clock {
+            hours: hours + hour,
+            minutes,
+        }
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
