@@ -32,6 +32,11 @@ mod test {
     fn test_sixty_minutes_is_next_hour() {
         assert_eq!(Clock::new(1, 60).to_string(), "02:00");
     }
+
+    #[test]
+    fn test_minutes_roll_over() {
+        assert_eq!(Clock::new(0, 160).to_string(), "02:40");
+    }
 }
 
 pub struct Clock {
