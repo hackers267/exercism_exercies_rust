@@ -63,6 +63,11 @@ mod test {
     fn test_negative_hour() {
         assert_eq!(Clock::new(-1, 15).to_string(), "23:15");
     }
+
+    #[test]
+    fn test_negative_hour_roll_over_continuously() {
+        assert_eq!(Clock::new(-91, 0).to_string(), "05:00")
+    }
 }
 
 pub struct Clock {
