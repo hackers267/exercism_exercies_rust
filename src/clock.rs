@@ -303,7 +303,7 @@ impl Clock {
         };
         let hours = (hours + hour + 24) % 24;
         let minutes = (minutes + 60) % 60;
-        Clock { hours, minutes }
+        Self { hours, minutes }
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
