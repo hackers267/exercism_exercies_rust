@@ -198,6 +198,12 @@ mod test {
         let clock = Clock::new(5, 32).add_minutes(-1500);
         assert_eq!(clock.to_string(), "04:32");
     }
+
+    #[test]
+    fn test_subtract_more_than_two_days() {
+        let clock = Clock::new(2, 20).add_minutes(-3000);
+        assert_eq!(clock.to_string(), "00:20");
+    }
 }
 
 pub struct Clock {
