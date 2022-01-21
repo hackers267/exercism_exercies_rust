@@ -58,6 +58,11 @@ mod test {
     fn test_hours_and_minutes_roll_over_to_exactly_midnight() {
         assert_eq!(Clock::new(72, 86400).to_string(), "00:00");
     }
+
+    #[test]
+    fn test_negative_hour() {
+        assert_eq!(Clock::new(-1, 15).to_string(), "23:15");
+    }
 }
 
 pub struct Clock {
@@ -68,7 +73,8 @@ pub struct Clock {
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
         let (hour, minutes) = div_mod(minutes, 60);
-        let (_, hours) = div_mod(hours + hour, 24);
+        let hours = hours % 24;
+        let hours = (hours + hour + 24) % 24;
         Clock { hours, minutes }
     }
 
