@@ -53,6 +53,11 @@ mod test {
     fn test_hours_and_minutes_roll_over_continuously() {
         assert_eq!(Clock::new(201, 3001).to_string(), "11:01");
     }
+
+    #[test]
+    fn test_hours_and_minutes_roll_over_to_exactly_midnight() {
+        assert_eq!(Clock::new(72, 86400).to_string(), "00:00");
+    }
 }
 
 pub struct Clock {
