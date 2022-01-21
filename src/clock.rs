@@ -138,6 +138,24 @@ mod test {
         let clock = Clock::new(0, 45).add_minutes(160);
         assert_eq!(clock.to_string(), "03:25");
     }
+
+    #[test]
+    fn test_add_across_midnight() {
+        let clock = Clock::new(23, 59).add_minutes(2);
+        assert_eq!(clock.to_string(), "00:01");
+    }
+
+    #[test]
+    fn test_add_more_than_one_day() {
+        let clock = Clock::new(5, 32).add_minutes(1500);
+        assert_eq!(clock.to_string(), "06:32");
+    }
+
+    #[test]
+    fn test_add_more_than_two_day() {
+        let clock = Clock::new(1, 1).add_minutes(3500);
+        assert_eq!(clock.to_string(), "11:21");
+    }
 }
 
 pub struct Clock {
