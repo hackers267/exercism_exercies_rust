@@ -174,6 +174,30 @@ mod test {
         let clock = Clock::new(10, 3).add_minutes(-70);
         assert_eq!(clock.to_string(), "08:53");
     }
+
+    #[test]
+    fn test_subtract_across_midnight() {
+        let clock = Clock::new(0, 3).add_minutes(-4);
+        assert_eq!(clock.to_string(), "23:59");
+    }
+
+    #[test]
+    fn test_subtract_more_than_two_hours() {
+        let clock = Clock::new(0, 0).add_minutes(-160);
+        assert_eq!(clock.to_string(), "21:20");
+    }
+
+    #[test]
+    fn test_subtract_more_than_two_hours_with_borrow() {
+        let clock = Clock::new(6, 15).add_minutes(-160);
+        assert_eq!(clock.to_string(), "03:35");
+    }
+
+    #[test]
+    fn test_subtract_more_than_one_day() {
+        let clock = Clock::new(5, 32).add_minutes(-1500);
+        assert_eq!(clock.to_string(), "04:32");
+    }
 }
 
 pub struct Clock {
