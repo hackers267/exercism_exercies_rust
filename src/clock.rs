@@ -156,6 +156,24 @@ mod test {
         let clock = Clock::new(1, 1).add_minutes(3500);
         assert_eq!(clock.to_string(), "11:21");
     }
+
+    #[test]
+    fn test_subtract_minutes() {
+        let clock = Clock::new(10, 3).add_minutes(-3);
+        assert_eq!(clock.to_string(), "10:00");
+    }
+
+    #[test]
+    fn test_subtract_to_previous_hour() {
+        let clock = Clock::new(10, 3).add_minutes(-30);
+        assert_eq!(clock.to_string(), "09:33");
+    }
+
+    #[test]
+    fn test_subtract_more_than_an_hour() {
+        let clock = Clock::new(10, 3).add_minutes(-70);
+        assert_eq!(clock.to_string(), "08:53");
+    }
 }
 
 pub struct Clock {
