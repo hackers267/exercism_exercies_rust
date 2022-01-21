@@ -108,6 +108,24 @@ mod test {
     fn test_zero_hour_and_negative_minutes() {
         assert_eq!(Clock::new(0, -22).to_string(), "23:38");
     }
+
+    #[test]
+    fn test_add_minutes() {
+        let clock = Clock::new(10, 0).add_minutes(3);
+        assert_eq!(clock.to_string(), "10:03");
+    }
+
+    #[test]
+    fn test_add_no_minutes() {
+        let clock = Clock::new(6, 41).add_minutes(0);
+        assert_eq!(clock.to_string(), "06:41");
+    }
+
+    #[test]
+    fn test_add_to_next_hour() {
+        let clock = Clock::new(0, 45).add_minutes(40);
+        assert_eq!(clock.to_string(), "01:25");
+    }
 }
 
 pub struct Clock {
@@ -130,11 +148,7 @@ impl Clock {
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
-        let (hour, minute) = div_mod(minutes, 60);
-        Self {
-            hours: self.hours + hour,
-            minutes: self.minutes + minute,
-        }
+        Self::new(self.hours, self.minutes + minutes)
     }
 }
 
