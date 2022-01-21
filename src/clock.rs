@@ -43,6 +43,11 @@ mod test {
     fn test_minutes_roll_over_continuously() {
         assert_eq!(Clock::new(0, 1723).to_string(), "04:43");
     }
+
+    #[test]
+    fn test_hours_and_minutes_roll_over() {
+        assert_eq!(Clock::new(25, 160).to_string(), "03:40");
+    }
 }
 
 pub struct Clock {
