@@ -291,18 +291,21 @@ pub struct Clock {
     minutes: i32,
 }
 
+const MINUTE_OF_HOUR: i32 = 60;
+const HOUR_OF_DAY: i32 = 24;
+
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let (hour, minutes) = div_mod(minutes, 60);
-        let hours = hours % 24;
+        let (hour, minutes) = div_mod(minutes, MINUTE_OF_HOUR);
+        let hours = hours % HOUR_OF_DAY;
         let hour = if minutes < 0 {
-            (hour - 1) % 24
+            (hour - 1) % HOUR_OF_DAY
         } else {
-            hour % 24
+            hour % HOUR_OF_DAY
         };
-        let hours = (hours + hour).rem_euclid(24);
-        let minutes = (minutes).rem_euclid(60);
-        let minute = hours * 60 + minutes;
+        let hours = (hours + hour).rem_euclid(HOUR_OF_DAY);
+        let minutes = (minutes).rem_euclid(MINUTE_OF_HOUR);
+        let minute = hours * MINUTE_OF_HOUR + minutes;
         Self { minutes: minute }
     }
 
@@ -313,8 +316,8 @@ impl Clock {
 
 impl Display for Clock {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let hours = self.minutes.div_euclid(60);
-        let minutes = self.minutes.rem_euclid(60);
+        let hours = self.minutes.div_euclid(MINUTE_OF_HOUR);
+        let minutes = self.minutes.rem_euclid(MINUTE_OF_HOUR);
         write!(f, "{:0>2}:{:0>2}", hours, minutes)
     }
 }
