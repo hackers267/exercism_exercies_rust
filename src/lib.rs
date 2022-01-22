@@ -1,6 +1,7 @@
 mod clock;
 mod health_statistic;
 mod low_power_game;
+mod resistor_color;
 mod role_playing_game;
 mod struct_logs;
 
