@@ -293,10 +293,11 @@ pub struct Clock {
 
 const MINUTE_OF_HOUR: i32 = 60;
 const HOUR_OF_DAY: i32 = 24;
+const MINUTE_OF_DAY: i32 = HOUR_OF_DAY * MINUTE_OF_HOUR;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let minutes = (hours * MINUTE_OF_HOUR + minutes).rem_euclid(HOUR_OF_DAY * MINUTE_OF_HOUR);
+        let minutes = (hours * MINUTE_OF_HOUR + minutes).rem_euclid(MINUTE_OF_DAY);
         Self { minutes }
     }
 
