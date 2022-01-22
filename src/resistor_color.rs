@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter};
 
+use enum_iterator::IntoEnumIterator;
 use int_enum::IntEnum;
 
 #[cfg(test)]
@@ -105,10 +106,25 @@ mod test {
     fn test_9_is_white() {
         assert_eq!(value_to_color_string(9), String::from("White"));
     }
+
+    #[test]
+    fn test_colors() {
+        assert!(colors().contains(&ResistorColor::Green));
+        assert!(colors().contains(&ResistorColor::Grey));
+        assert!(colors().contains(&ResistorColor::Red));
+        assert!(colors().contains(&ResistorColor::Yellow));
+        assert!(colors().contains(&ResistorColor::Black));
+        assert!(colors().contains(&ResistorColor::Brown));
+        assert!(colors().contains(&ResistorColor::Blue));
+        assert!(colors().contains(&ResistorColor::Violet));
+        assert!(colors().contains(&ResistorColor::White));
+        assert!(colors().contains(&ResistorColor::Orange));
+        assert_eq!(colors().len(), 10);
+    }
 }
 
 #[repr(usize)]
-#[derive(Debug, PartialEq, Copy, Clone, IntEnum)]
+#[derive(Debug, IntoEnumIterator, Eq, PartialEq, Copy, Clone, IntEnum)]
 pub enum ResistorColor {
     Black = 0,
     Brown = 1,
@@ -134,4 +150,8 @@ pub fn color_to_value(_color: ResistorColor) -> usize {
 
 pub fn value_to_color_string(value: usize) -> String {
     ResistorColor::from_int(value).unwrap().to_string()
+}
+
+pub fn colors() -> Vec<ResistorColor> {
+    ResistorColor::into_enum_iter().collect()
 }
