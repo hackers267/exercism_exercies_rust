@@ -296,17 +296,8 @@ const HOUR_OF_DAY: i32 = 24;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let (hour, minutes) = div_mod(minutes, MINUTE_OF_HOUR);
-        let hours = hours % HOUR_OF_DAY;
-        let hour = if minutes < 0 {
-            (hour - 1) % HOUR_OF_DAY
-        } else {
-            hour % HOUR_OF_DAY
-        };
-        let hours = (hours + hour).rem_euclid(HOUR_OF_DAY);
-        let minutes = (minutes).rem_euclid(MINUTE_OF_HOUR);
-        let minute = hours * MINUTE_OF_HOUR + minutes;
-        Self { minutes: minute }
+        let minutes = (hours * MINUTE_OF_HOUR + minutes).rem_euclid(HOUR_OF_DAY * MINUTE_OF_HOUR);
+        Self { minutes }
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
