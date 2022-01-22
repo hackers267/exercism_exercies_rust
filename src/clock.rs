@@ -301,8 +301,8 @@ impl Clock {
         } else {
             hour % 24
         };
-        let hours = (hours + hour + 24) % 24;
-        let minutes = (minutes + 60) % 60;
+        let hours = (hours + hour).rem_euclid(24);
+        let minutes = (minutes).rem_euclid(60);
         Self { hours, minutes }
     }
 
