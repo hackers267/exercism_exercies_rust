@@ -313,7 +313,3 @@ impl Display for Clock {
         write!(f, "{:0>2}:{:0>2}", hours, minutes)
     }
 }
-
-fn div_mod(dividend: i32, divisor: i32) -> (i32, i32) {
-    (dividend / divisor, dividend % divisor)
-}
