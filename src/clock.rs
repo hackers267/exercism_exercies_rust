@@ -288,7 +288,6 @@ mod test {
 
 #[derive(PartialEq, Debug)]
 pub struct Clock {
-    hours: i32,
     minutes: i32,
 }
 
@@ -303,17 +302,20 @@ impl Clock {
         };
         let hours = (hours + hour).rem_euclid(24);
         let minutes = (minutes).rem_euclid(60);
-        Self { hours, minutes }
+        let minute = hours * 60 + minutes;
+        Self { minutes: minute }
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
-        Self::new(self.hours, self.minutes + minutes)
+        Self::new(0, self.minutes + minutes)
     }
 }
 
 impl Display for Clock {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:0>2}:{:0>2}", self.hours, self.minutes)
+        let hours = self.minutes.div_euclid(60);
+        let minutes = self.minutes.rem_euclid(60);
+        write!(f, "{:0>2}:{:0>2}", hours, minutes)
     }
 }
 
