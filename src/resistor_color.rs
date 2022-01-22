@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter};
+
 use int_enum::IntEnum;
 
 #[cfg(test)]
@@ -53,6 +55,56 @@ mod test {
     fn test_is_white() {
         assert_eq!(color_to_value(ResistorColor::White), 9);
     }
+
+    #[test]
+    fn test_0_is_black() {
+        assert_eq!(value_to_color_string(0), String::from("Black"));
+    }
+
+    #[test]
+    fn test_1_is_brown() {
+        assert_eq!(value_to_color_string(1), String::from("Brown"));
+    }
+
+    #[test]
+    fn test_2_is_red() {
+        assert_eq!(value_to_color_string(2), String::from("Red"));
+    }
+
+    #[test]
+    fn test_3_is_orange() {
+        assert_eq!(value_to_color_string(3), String::from("Orange"));
+    }
+
+    #[test]
+    fn test_4_is_yellow() {
+        assert_eq!(value_to_color_string(4), String::from("Yellow"));
+    }
+
+    #[test]
+    fn test_5_is_green() {
+        assert_eq!(value_to_color_string(5), String::from("Green"));
+    }
+
+    #[test]
+    fn test_6_is_blue() {
+        assert_eq!(value_to_color_string(6), String::from("Blue"));
+    }
+
+    #[test]
+    fn test_7_is_violet() {
+        assert_eq!(value_to_color_string(7), String::from("Violet"));
+    }
+
+    #[test]
+    fn test_8_is_grey() {
+        assert_eq!(value_to_color_string(8), String::from("Grey"));
+    }
+
+    #[test]
+    fn test_9_is_white() {
+        assert_eq!(value_to_color_string(9), String::from("White"));
+    }
 }
 
 #[repr(usize)]
@@ -70,6 +122,16 @@ pub enum ResistorColor {
     White = 9,
 }
 
+impl Display for ResistorColor {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 pub fn color_to_value(_color: ResistorColor) -> usize {
     _color.int_value()
+}
+
+pub fn value_to_color_string(value: usize) -> String {
+    ResistorColor::from_int(value).unwrap().to_string()
 }
