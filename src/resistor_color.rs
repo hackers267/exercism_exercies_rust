@@ -1,3 +1,5 @@
+use int_enum::IntEnum;
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -53,31 +55,21 @@ mod test {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[repr(usize)]
+#[derive(Debug, PartialEq, Copy, Clone, IntEnum)]
 pub enum ResistorColor {
-    Black,
-    Blue,
-    Brown,
-    Green,
-    Grey,
-    Orange,
-    Red,
-    Violet,
-    White,
-    Yellow,
+    Black = 0,
+    Brown = 1,
+    Red = 2,
+    Orange = 3,
+    Yellow = 4,
+    Green = 5,
+    Blue = 6,
+    Violet = 7,
+    Grey = 8,
+    White = 9,
 }
 
 pub fn color_to_value(_color: ResistorColor) -> usize {
-    match _color {
-        ResistorColor::Black => 0,
-        ResistorColor::Brown => 1,
-        ResistorColor::Red => 2,
-        ResistorColor::Orange => 3,
-        ResistorColor::Yellow => 4,
-        ResistorColor::Green => 5,
-        ResistorColor::Blue => 6,
-        ResistorColor::Violet => 7,
-        ResistorColor::Grey => 8,
-        ResistorColor::White => 9,
-    }
+    _color.int_value()
 }
