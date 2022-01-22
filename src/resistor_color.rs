@@ -108,6 +108,14 @@ mod test {
     }
 
     #[test]
+    fn test_out_range() {
+        assert_eq!(
+            value_to_color_string(11),
+            String::from("value out of range")
+        );
+    }
+
+    #[test]
     fn test_colors() {
         assert!(colors().contains(&ResistorColor::Green));
         assert!(colors().contains(&ResistorColor::Grey));
@@ -149,7 +157,12 @@ pub fn color_to_value(_color: ResistorColor) -> usize {
 }
 
 pub fn value_to_color_string(value: usize) -> String {
-    ResistorColor::from_int(value).unwrap().to_string()
+    let result = ResistorColor::from_int(value);
+    if result.is_ok() {
+        result.unwrap().to_string()
+    } else {
+        String::from("value out of range")
+    }
 }
 
 pub fn colors() -> Vec<ResistorColor> {
