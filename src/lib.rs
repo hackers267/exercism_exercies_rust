@@ -1,3 +1,4 @@
+mod allergies;
 mod clock;
 mod health_statistic;
 mod low_power_game;
