@@ -145,12 +145,18 @@ pub enum Allergen {
     Cats = 128,
 }
 
+impl From<&Allergen> for u32 {
+    fn from(value: &Allergen) -> Self {
+        *value as u32
+    }
+}
+
 impl Allergies {
     pub fn new(score: u32) -> Self {
         Self { score }
     }
     pub fn is_allergic_to(&self, allergen: &Allergen) -> bool {
-        self.score & *allergen as u32 > 0
+        self.score & u32::from(allergen) > 0
     }
     pub fn allergies(&self) -> Vec<Allergen> {
         let string = format!("{:b}", self.score);
