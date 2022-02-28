@@ -1,3 +1,6 @@
+use enum_iterator::IntoEnumIterator;
+use int_enum::IntEnum;
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -132,7 +135,7 @@ pub struct Allergies {
     score: u32,
 }
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, PartialEq, Copy, Clone, IntEnum, IntoEnumIterator)]
 #[repr(u32)]
 pub enum Allergen {
     Eggs = 1,
@@ -159,24 +162,8 @@ impl Allergies {
         self.score & u32::from(allergen) > 0
     }
     pub fn allergies(&self) -> Vec<Allergen> {
-        let string = format!("{:b}", self.score);
-        let string = format!("{:0>8}", string);
-        let list: [Allergen; 8] = [
-            Allergen::Eggs,
-            Allergen::Peanuts,
-            Allergen::Shellfish,
-            Allergen::Strawberries,
-            Allergen::Tomatoes,
-            Allergen::Chocalate,
-            Allergen::Pollen,
-            Allergen::Cats,
-        ];
-        string
-            .chars()
-            .rev()
-            .enumerate()
-            .filter_map(|(i, char)| if char == '1' { list.get(i) } else { None })
-            .map(|x| *x)
+        Allergen::into_enum_iter()
+            .filter(|x| self.is_allergic_to(x))
             .collect()
     }
 }
