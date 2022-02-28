@@ -133,15 +133,22 @@ pub struct Allergies {
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]
+#[repr(u32)]
 pub enum Allergen {
-    Eggs,
-    Peanuts,
-    Shellfish,
-    Strawberries,
-    Tomatoes,
-    Chocalate,
-    Pollen,
-    Cats,
+    Eggs = 1,
+    Peanuts = 2,
+    Shellfish = 4,
+    Strawberries = 8,
+    Tomatoes = 16,
+    Chocalate = 32,
+    Pollen = 64,
+    Cats = 128,
+}
+
+impl From<&Allergen> for u32 {
+    fn from(value: &Allergen) -> Self {
+        *value as u32
+    }
 }
 
 impl Allergies {
