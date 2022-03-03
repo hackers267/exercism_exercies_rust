@@ -17,7 +17,7 @@ mod test {
     #[test]
     fn log_info() {
         let result = log(LogLevel::Info, "Info");
-        assert_eq!(result, "[INFO]:info")
+        assert_eq!(result, "[INFO]:Info")
     }
 
     #[test]
