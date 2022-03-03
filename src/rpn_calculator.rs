@@ -12,6 +12,21 @@ mod test {
         let result = evaluate(&inputs);
         assert_eq!(result, Option::Some(5));
     }
+
+    #[test]
+    fn complex_inputs() {
+        let inputs = [
+            CalculatorInput::Value(4),
+            CalculatorInput::Value(8),
+            CalculatorInput::Add,
+            CalculatorInput::Value(7),
+            CalculatorInput::Value(5),
+            CalculatorInput::Subtract,
+            CalculatorInput::Divide,
+        ];
+        let result = evaluate(&inputs);
+        assert_eq!(result, Option::Some(6));
+    }
 }
 
 #[derive(Debug)]
@@ -36,15 +51,21 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
                     number_stack.push(x)
                 }
                 CalculatorInput::Subtract => {
-                    let x = number_stack.pop().unwrap() + number_stack.pop().unwrap();
+                    let first = number_stack.pop().unwrap();
+                    let second = number_stack.pop().unwrap();
+                    let x = second - first;
                     number_stack.push(x)
                 }
                 CalculatorInput::Divide => {
-                    let x = number_stack.pop().unwrap() / number_stack.pop().unwrap();
+                    let first = number_stack.pop().unwrap();
+                    let second = number_stack.pop().unwrap();
+                    let x = second / first;
                     number_stack.push(x)
                 }
                 CalculatorInput::Multiply => {
-                    let x = number_stack.pop().unwrap() * number_stack.pop().unwrap();
+                    let first = number_stack.pop().unwrap();
+                    let second = number_stack.pop().unwrap();
+                    let x = first * second;
                     number_stack.push(x)
                 }
             },
