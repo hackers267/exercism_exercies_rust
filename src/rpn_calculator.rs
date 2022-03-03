@@ -1,5 +1,3 @@
-use std::ptr::null;
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -34,19 +32,19 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
             Some(in_input) => match in_input {
                 CalculatorInput::Value(j) => number_stack.push(*j),
                 CalculatorInput::Add => {
-                    let x = number_stack.pop().expect("") + number_stack.pop().expect("");
+                    let x = number_stack.pop().unwrap() + number_stack.pop().unwrap();
                     number_stack.push(x)
                 }
                 CalculatorInput::Subtract => {
-                    let x = number_stack.pop().expect("") + number_stack.pop().expect("");
+                    let x = number_stack.pop().unwrap() + number_stack.pop().unwrap();
                     number_stack.push(x)
                 }
                 CalculatorInput::Divide => {
-                    let x = number_stack.pop().expect("") / number_stack.pop().expect("");
+                    let x = number_stack.pop().unwrap() / number_stack.pop().unwrap();
                     number_stack.push(x)
                 }
                 CalculatorInput::Multiply => {
-                    let x = number_stack.pop().expect("") * number_stack.pop().expect("");
+                    let x = number_stack.pop().unwrap() * number_stack.pop().unwrap();
                     number_stack.push(x)
                 }
             },
