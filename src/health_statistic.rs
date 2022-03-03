@@ -7,6 +7,7 @@ mod test {
         let weight = 155.2_f32;
         let age = 32_u32;
         let mut user = User::new(String::from("Bob"), age, weight);
+        assert_eq!(user.name, String::from("Bob"));
         assert_eq!(weight, user.weight());
         assert_eq!(age, user.age());
         let new_age = 33;

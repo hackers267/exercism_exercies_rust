@@ -9,6 +9,18 @@ mod test {
     }
 
     #[test]
+    fn log_warn() {
+        let result = log(LogLevel::Warning, "Warning");
+        assert_eq!(result, "[WARN]:Warning")
+    }
+
+    #[test]
+    fn log_info() {
+        let result = log(LogLevel::Info, "Info");
+        assert_eq!(result, "[INFO]:info")
+    }
+
+    #[test]
     fn test_production_rate_per_hour() {
         let result = production_rate_per_hour(4);
         assert_eq!(result, 884_f64)
@@ -39,7 +51,7 @@ pub fn error(message: &str) -> String {
     String::from("[ERROR]:") + message
 }
 pub fn production_rate_per_hour(speed: u8) -> f64 {
-    let mul: f64 = (221_f64 * speed as f64);
+    let mul: f64 = 221_f64 * speed as f64;
     if speed >= 1 && speed <= 4 {
         mul * 1.0
     } else if speed <= 8 {
@@ -47,12 +59,4 @@ pub fn production_rate_per_hour(speed: u8) -> f64 {
     } else {
         mul * 0.8
     }
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Comparison {
-    Equal,
-    Sublist,
-    Superlist,
-    Unequal,
 }
