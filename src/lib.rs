@@ -4,6 +4,7 @@ mod health_statistic;
 mod low_power_game;
 mod resistor_color;
 mod role_playing_game;
+mod rpn_calculator;
 mod short_fibonacci_sequence;
 mod struct_logs;
 
