@@ -27,6 +27,37 @@ mod test {
         let result = evaluate(&inputs);
         assert_eq!(result, Option::Some(6));
     }
+
+    #[test]
+    fn test_zero_operands_returns_none() {
+        let inputs = [CalculatorInput::Value(3), CalculatorInput::Value(5)];
+        let result = evaluate(&inputs);
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn test_too_few_operands_returns_none() {
+        let inputs = [
+            CalculatorInput::Add,
+            CalculatorInput::Value(3),
+            CalculatorInput::Value(5),
+            CalculatorInput::Value(7),
+        ];
+        let result = evaluate(&inputs);
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn test_too_many_operands_return_none() {
+        let inputs = [
+            CalculatorInput::Value(5),
+            CalculatorInput::Value(3),
+            CalculatorInput::Multiply,
+            CalculatorInput::Add,
+        ];
+        let result = evaluate(&inputs);
+        assert_eq!(result, None);
+    }
 }
 
 #[derive(Debug)]
@@ -47,30 +78,50 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
             Some(in_input) => match in_input {
                 CalculatorInput::Value(j) => number_stack.push(*j),
                 CalculatorInput::Add => {
-                    let x = number_stack.pop().unwrap() + number_stack.pop().unwrap();
-                    number_stack.push(x)
+                    let first_option = number_stack.pop();
+                    let second_option = number_stack.pop();
+                    if first_option.is_some() && second_option.is_some() {
+                        let x = first_option.unwrap() + second_option.unwrap();
+                        number_stack.push(x)
+                    }
                 }
                 CalculatorInput::Subtract => {
-                    let first = number_stack.pop().unwrap();
-                    let second = number_stack.pop().unwrap();
-                    let x = second - first;
-                    number_stack.push(x)
+                    let first_option = number_stack.pop();
+                    let second_option = number_stack.pop();
+                    if first_option.is_some() && second_option.is_some() {
+                        let second = second_option.unwrap();
+                        let first = first_option.unwrap();
+                        let x = second - first;
+                        number_stack.push(x)
+                    }
                 }
                 CalculatorInput::Divide => {
-                    let first = number_stack.pop().unwrap();
-                    let second = number_stack.pop().unwrap();
-                    let x = second / first;
-                    number_stack.push(x)
+                    let first_option = number_stack.pop();
+                    let second_option = number_stack.pop();
+                    if first_option.is_some() && second_option.is_some() {
+                        let first = first_option.unwrap();
+                        let second = second_option.unwrap();
+                        let x = second / first;
+                        number_stack.push(x)
+                    }
                 }
                 CalculatorInput::Multiply => {
-                    let first = number_stack.pop().unwrap();
-                    let second = number_stack.pop().unwrap();
-                    let x = first * second;
-                    number_stack.push(x)
+                    let first_option = number_stack.pop();
+                    let second_option = number_stack.pop();
+                    if first_option.is_some() && second_option.is_some() {
+                        let first = first_option.unwrap();
+                        let second = second_option.unwrap();
+                        let x = first * second;
+                        number_stack.push(x)
+                    }
                 }
             },
             None => (),
         }
     }
-    return number_stack.pop();
+    let result = number_stack.pop();
+    if number_stack.len() == 0 {
+        return result;
+    }
+    return None;
 }
