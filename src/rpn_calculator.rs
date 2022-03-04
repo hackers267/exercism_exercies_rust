@@ -58,6 +58,18 @@ mod test {
         let result = evaluate(&inputs);
         assert_eq!(result, None);
     }
+
+    #[test]
+    fn test_intermediate_error_returns_none() {
+        let inputs = [
+            CalculatorInput::Add,
+            CalculatorInput::Value(2),
+            CalculatorInput::Value(2),
+            CalculatorInput::Multiply,
+        ];
+        let results = evaluate(&inputs);
+        assert_eq!(results, None);
+    }
 }
 
 #[derive(Debug)]
@@ -83,6 +95,9 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
                     if first_option.is_some() && second_option.is_some() {
                         let x = first_option.unwrap() + second_option.unwrap();
                         number_stack.push(x)
+                    } else {
+                        number_stack.push(0);
+                        number_stack.push(0)
                     }
                 }
                 CalculatorInput::Subtract => {
@@ -93,6 +108,9 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
                         let first = first_option.unwrap();
                         let x = second - first;
                         number_stack.push(x)
+                    } else {
+                        number_stack.push(0);
+                        number_stack.push(0)
                     }
                 }
                 CalculatorInput::Divide => {
@@ -103,6 +121,9 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
                         let second = second_option.unwrap();
                         let x = second / first;
                         number_stack.push(x)
+                    } else {
+                        number_stack.push(0);
+                        number_stack.push(0)
                     }
                 }
                 CalculatorInput::Multiply => {
@@ -113,6 +134,9 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
                         let second = second_option.unwrap();
                         let x = first * second;
                         number_stack.push(x)
+                    } else {
+                        number_stack.push(0);
+                        number_stack.push(0)
                     }
                 }
             },
