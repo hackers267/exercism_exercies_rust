@@ -83,64 +83,29 @@ pub enum CalculatorInput {
 
 pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
     let mut number_stack: Vec<i32> = Vec::new();
-    let len = inputs.len();
-    for i in 0..len {
-        let input = inputs.get(i);
+    for input in inputs {
         match input {
-            Some(in_input) => match in_input {
-                CalculatorInput::Value(j) => number_stack.push(*j),
-                CalculatorInput::Add => {
-                    let first_option = number_stack.pop();
-                    let second_option = number_stack.pop();
-                    if first_option.is_some() && second_option.is_some() {
-                        let x = first_option.unwrap() + second_option.unwrap();
-                        number_stack.push(x)
-                    } else {
-                        number_stack.push(0);
-                        number_stack.push(0)
-                    }
-                }
-                CalculatorInput::Subtract => {
-                    let first_option = number_stack.pop();
-                    let second_option = number_stack.pop();
-                    if first_option.is_some() && second_option.is_some() {
-                        let second = second_option.unwrap();
-                        let first = first_option.unwrap();
-                        let x = second - first;
-                        number_stack.push(x)
-                    } else {
-                        number_stack.push(0);
-                        number_stack.push(0)
-                    }
-                }
-                CalculatorInput::Divide => {
-                    let first_option = number_stack.pop();
-                    let second_option = number_stack.pop();
-                    if first_option.is_some() && second_option.is_some() {
-                        let first = first_option.unwrap();
-                        let second = second_option.unwrap();
-                        let x = second / first;
-                        number_stack.push(x)
-                    } else {
-                        number_stack.push(0);
-                        number_stack.push(0)
-                    }
-                }
-                CalculatorInput::Multiply => {
-                    let first_option = number_stack.pop();
-                    let second_option = number_stack.pop();
-                    if first_option.is_some() && second_option.is_some() {
-                        let first = first_option.unwrap();
-                        let second = second_option.unwrap();
-                        let x = first * second;
-                        number_stack.push(x)
-                    } else {
-                        number_stack.push(0);
-                        number_stack.push(0)
-                    }
-                }
-            },
-            None => (),
+            CalculatorInput::Value(number) => number_stack.push(*number),
+            CalculatorInput::Add => {
+                let first = number_stack.pop()?;
+                let second = number_stack.pop()?;
+                number_stack.push(second + first)
+            }
+            CalculatorInput::Subtract => {
+                let first = number_stack.pop()?;
+                let second = number_stack.pop()?;
+                number_stack.push(second - first)
+            }
+            CalculatorInput::Multiply => {
+                let first = number_stack.pop()?;
+                let second = number_stack.pop()?;
+                number_stack.push(second * first)
+            }
+            CalculatorInput::Divide => {
+                let first = number_stack.pop()?;
+                let second = number_stack.pop()?;
+                number_stack.push(second / first)
+            }
         }
     }
     let result = number_stack.pop();
