@@ -1,3 +1,5 @@
+use std::ops::{Add, Div, Mul, Sub};
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -81,36 +83,28 @@ pub enum CalculatorInput {
     Value(i32),
 }
 
+fn binary_operation(stack: &mut Vec<i32>, f: impl Fn(i32, i32) -> i32) -> Option<i32> {
+    stack.pop().and_then(|x| stack.pop().map(|y| f(y, x)))
+}
+
 pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
-    let mut number_stack: Vec<i32> = Vec::new();
-    for input in inputs {
-        match input {
-            CalculatorInput::Value(number) => number_stack.push(*number),
-            CalculatorInput::Add => {
-                let first = number_stack.pop()?;
-                let second = number_stack.pop()?;
-                number_stack.push(second + first)
+    inputs
+        .iter()
+        .try_fold(vec![], |mut stack, cur| {
+            match *cur {
+                CalculatorInput::Add => binary_operation(&mut stack, i32::add),
+                CalculatorInput::Subtract => binary_operation(&mut stack, i32::sub),
+                CalculatorInput::Multiply => binary_operation(&mut stack, i32::mul),
+                CalculatorInput::Divide => binary_operation(&mut stack, i32::div),
+                CalculatorInput::Value(i) => Some(i),
             }
-            CalculatorInput::Subtract => {
-                let first = number_stack.pop()?;
-                let second = number_stack.pop()?;
-                number_stack.push(second - first)
-            }
-            CalculatorInput::Multiply => {
-                let first = number_stack.pop()?;
-                let second = number_stack.pop()?;
-                number_stack.push(second * first)
-            }
-            CalculatorInput::Divide => {
-                let first = number_stack.pop()?;
-                let second = number_stack.pop()?;
-                number_stack.push(second / first)
-            }
-        }
-    }
-    let result = number_stack.pop();
-    if number_stack.len() == 0 {
-        return result;
-    }
-    return None;
+            .map(|x| {
+                stack.push(x);
+                stack
+            })
+        })
+        .and_then(|stack| match stack.as_slice() {
+            [x] => Some(*x),
+            _ => None,
+        })
 }
