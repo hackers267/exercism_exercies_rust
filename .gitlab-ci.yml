@@ -2,8 +2,9 @@ image: "rust:latest"
 # Use cargo to test the project
 test:cargo:
   script:
+    - echo ${CI_PROJECT_ID}/defalut
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo test --workspace --verbose
 cache:
   - paths:
-    - ~/.cargo
+    - ${CI_PROJECT_ID}/defalut
