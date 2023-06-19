@@ -7,6 +7,7 @@ mod role_playing_game;
 mod rpn_calculator;
 mod short_fibonacci_sequence;
 mod struct_logs;
+mod tournament;
 
 #[cfg(test)]
 mod tests {
