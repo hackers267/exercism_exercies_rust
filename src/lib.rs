@@ -1,6 +1,7 @@
 mod allergies;
 mod arm_strong_num;
 mod clock;
+mod diff_of_squares;
 mod health_statistic;
 mod low_power_game;
 mod resistor_color;
