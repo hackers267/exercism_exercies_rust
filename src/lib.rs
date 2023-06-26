@@ -8,6 +8,7 @@ mod resistor_color;
 mod reverse_string;
 mod role_playing_game;
 mod rpn_calculator;
+mod series;
 mod short_fibonacci_sequence;
 mod struct_logs;
 mod tournament;
