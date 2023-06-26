@@ -49,12 +49,12 @@ mod tests {
 }
 
 fn square_of_sum(n: u32) -> u32 {
-    let sum = (0..=n).fold(0, |acc, cur| acc + cur);
+    let sum = n * (n + 1) / 2;
     sum.pow(2)
 }
 
 fn sum_of_square(n: u32) -> u32 {
-    (0..=n).map(|v| v.pow(2)).fold(0, |acc, cur| acc + cur)
+    n * (n + 1) * (2 * n + 1) / 6
 }
 
 fn difference(n: u32) -> u32 {
