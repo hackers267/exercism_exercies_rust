@@ -21,14 +21,27 @@ mod tests {
     fn num_154_not() {
         assert!(!is_armstrong_number(154))
     }
+
+    #[test]
+    fn num_4_106_098_957_not() {
+        assert!(!is_armstrong_number(4_106_098_957))
+    }
 }
 
 fn is_armstrong_number(num: u32) -> bool {
     let len = num.to_string().len() as u32;
-    let mul = num
+    let mul: (u32, bool) = num
         .to_string()
         .chars()
         .map(|v| v.to_digit(10).unwrap())
-        .fold(0, |acc, cur| acc + cur.pow(len));
-    num == mul
+        .fold((0, false), |acc: (u32, bool), cur: u32| {
+            let is_over = acc.1;
+            if is_over {
+                (0, true)
+            } else {
+                acc.0.overflowing_add(cur.pow(len))
+            }
+        });
+    println!("mul {:?}", mul);
+    !mul.1 && mul.0 == num
 }
