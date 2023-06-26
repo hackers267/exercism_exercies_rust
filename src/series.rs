@@ -40,15 +40,10 @@ fn series(digits: &str, len: usize) -> Vec<String> {
     if len > digit_len {
         return vec![];
     }
-    let count = digit_len - len;
-    (0..=count)
-        .map(|index| {
-            digits
-                .chars()
-                .map(|v| v.to_string())
-                .skip(index)
-                .take(len)
-                .collect()
-        })
+    digits
+        .chars()
+        .collect::<Vec<char>>()
+        .windows(len)
+        .map(|c| c.into_iter().collect::<String>())
         .collect()
 }
