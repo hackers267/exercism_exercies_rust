@@ -29,7 +29,7 @@ mod tests {
 }
 
 fn is_armstrong_number(num: u32) -> bool {
-    let len = num.to_string().len() as u32;
+    let digit_count: u32 = num.ilog10() + 1;
     let mul: (u32, bool) = num
         .to_string()
         .chars()
@@ -39,7 +39,7 @@ fn is_armstrong_number(num: u32) -> bool {
             if is_over {
                 (0, true)
             } else {
-                acc.0.overflowing_add(cur.pow(len))
+                acc.0.overflowing_add(cur.pow(digit_count))
             }
         });
     println!("mul {:?}", mul);
