@@ -30,9 +30,8 @@ mod tests {
 
 fn is_armstrong_number(num: u32) -> bool {
     let digit_count: u32 = num.ilog10() + 1;
-    num.to_string()
-        .chars()
-        .map(|v| v.to_digit(10).unwrap())
+    (0..digit_count)
+        .map(|index| ((num / 10_u32.pow(index)) % 10))
         .try_fold(0_u32, |acc, cur| acc.checked_add(cur.pow(digit_count)))
         .is_some_and(|sum| sum == num)
 }
