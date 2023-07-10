@@ -1,4 +1,4 @@
-use std::collections::{hash_map, HashMap};
+use std::collections::HashMap;
 use std::ops::{Add, Mul};
 
 #[cfg(test)]
@@ -70,8 +70,8 @@ impl Score {
 }
 
 pub fn tally(match_input: &str) -> String {
-    let mut init: HashMap<&str, Score> = HashMap::new();
-    match_input
+    let init: HashMap<&str, Score> = HashMap::new();
+    let binding = match_input
         .split("\n")
         .map(|x| {
             let result: Vec<&str> = x.split(";").collect();
@@ -90,12 +90,12 @@ pub fn tally(match_input: &str) -> String {
                     acc.insert(team2, Score::drawer());
                 }
             }
-            println!("{:#?}", acc);
             acc
-        })
-        .iter()
+        });
+    let mut vecs: Vec<_> = binding.iter().collect();
+    vecs.sort_by(|a, b| b.1.p.cmp(&a.1.p));
+    vecs.into_iter()
         .fold(String::from("Team | MP | W | D | L | P"), |acc, cur| {
-            println!("{:?}", cur);
             let (team, score) = cur;
             let play = score.w.add(score.d).add(score.l).to_string();
             let win = score.w.to_string();
