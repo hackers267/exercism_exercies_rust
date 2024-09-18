@@ -13,6 +13,7 @@ mod rpn_calculator;
 mod series;
 mod short_fibonacci_sequence;
 mod struct_logs;
+mod sublist;
 mod tournament;
 
 #[cfg(test)]
