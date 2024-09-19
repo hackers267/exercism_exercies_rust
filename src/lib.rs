@@ -1,5 +1,6 @@
 mod allergies;
 mod arm_strong_num;
+mod beer_song;
 mod clock;
 mod diff_of_squares;
 mod gigasecond;
