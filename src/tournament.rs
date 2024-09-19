@@ -110,13 +110,7 @@ pub fn tally(match_input: &str) -> String {
             acc
         });
     let mut vecs: Vec<_> = binding.iter().collect();
-    vecs.sort_by(|a, b| match (b.1.p.cmp(&a.1.p), b.0.cmp(a.0)) {
-        (Ordering::Less, _) => Ordering::Less,
-        (Ordering::Greater, _) => Ordering::Greater,
-        (_, Ordering::Less) => Ordering::Greater,
-        (_, Ordering::Equal) => Ordering::Equal,
-        (_, Ordering::Greater) => Ordering::Less,
-    });
+    vecs.sort_by(|a, b| b.1.p.cmp(&a.1.p).then_with(|| a.0.cmp(b.0)));
     vecs.into_iter().fold(
         String::from("Team                           | MP |  W |  D |  L |  P"),
         |acc, cur| {
