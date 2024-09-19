@@ -1,8 +1,8 @@
 use std::cmp::Ordering;
 use std::collections::HashMap;
-use std::ops::{Add, Mul};
+use std::ops::{Add, AddAssign, Mul};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 struct Score {
     w: u8,
     d: u8,
@@ -38,6 +38,27 @@ impl Score {
     }
 }
 
+impl Add for Score {
+    type Output = Score;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let w = self.w + rhs.w;
+        let d = self.d + rhs.d;
+        let l = self.l + rhs.l;
+        let p = self.p + rhs.p;
+        Self { w, d, l, p }
+    }
+}
+
+impl AddAssign for Score {
+    fn add_assign(&mut self, rhs: Self) {
+        self.w += rhs.w;
+        self.d += rhs.d;
+        self.l += rhs.l;
+        self.p += rhs.p;
+    }
+}
+
 pub fn tally(match_input: &str) -> String {
     let init: HashMap<&str, Score> = HashMap::new();
     let binding = match_input
@@ -49,62 +70,20 @@ pub fn tally(match_input: &str) -> String {
         .fold(init, |mut acc, cur| {
             if let [team1, team2, result] = cur[..] {
                 if result == "win" {
-                    acc.entry(team1)
-                        .and_modify(|v| {
-                            let score = Score::winner();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::winner());
-                    acc.entry(team2)
-                        .and_modify(|v| {
-                            let score = Score::loser();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::loser());
+                    let score = acc.entry(team1).or_default();
+                    *score += Score::winner();
+                    let score = acc.entry(team2).or_default();
+                    *score += Score::loser();
                 } else if result == "loss" {
-                    acc.entry(team2)
-                        .and_modify(|v| {
-                            let score = Score::winner();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::winner());
-                    acc.entry(team1)
-                        .and_modify(|v| {
-                            let score = Score::loser();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::loser());
+                    let score = acc.entry(team2).or_default();
+                    *score += Score::winner();
+                    let score = acc.entry(team1).or_default();
+                    *score += Score::loser();
                 } else {
-                    acc.entry(team2)
-                        .and_modify(|v| {
-                            let score = Score::drawer();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::drawer());
-                    acc.entry(team1)
-                        .and_modify(|v| {
-                            let score = Score::drawer();
-                            v.w += score.w;
-                            v.d += score.d;
-                            v.l += score.l;
-                            v.p += score.p;
-                        })
-                        .or_insert(Score::drawer());
+                    let score = acc.entry(team2).or_default();
+                    *score += Score::drawer();
+                    let score = acc.entry(team1).or_default();
+                    *score += Score::drawer();
                 }
             }
             acc
