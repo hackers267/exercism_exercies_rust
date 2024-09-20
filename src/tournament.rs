@@ -1,111 +1,109 @@
-use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::ops::{Add, AddAssign, Mul};
 
-#[derive(Debug, Clone, Copy, Default)]
-struct Score {
-    w: u8,
-    d: u8,
-    l: u8,
-    p: u8,
+#[derive(Default, PartialEq, Eq)]
+struct Team {
+    name: String,
+    matches: u8,
+    wins: u8,
+    draws: u8,
+    losses: u8,
+    points: u16,
 }
 
-impl Score {
-    fn winner() -> Score {
-        Score {
-            w: 1,
-            d: 0,
-            l: 0,
-            p: 3,
+impl Team {
+    fn new(name: &str) -> Self {
+        let name = name.to_string();
+        Self {
+            name,
+            ..Default::default()
         }
     }
-
-    fn loser() -> Score {
-        Score {
-            w: 0,
-            d: 0,
-            l: 1,
-            p: 0,
+    fn win(&mut self) {
+        self.wins += 1;
+        self.matches += 1;
+        self.points += 3;
+    }
+    fn draw(&mut self) {
+        self.matches += 1;
+        self.draws += 1;
+        self.points += 1;
+    }
+    fn loss(&mut self) {
+        self.matches += 1;
+        self.losses += 1;
+    }
+    fn add_match(&mut self, result: &MatchResult) {
+        match result {
+            MatchResult::Win => self.win(),
+            MatchResult::Draw => self.draw(),
+            MatchResult::Loss => self.loss(),
         }
     }
-    fn drawer() -> Score {
-        Score {
-            w: 0,
-            d: 1,
-            l: 0,
-            p: 1,
+}
+
+impl From<&Team> for String {
+    fn from(team: &Team) -> Self {
+        format!(
+            "{:<30} | {:>2} | {:>2} | {:>2} | {:>2} | {:>2}",
+            team.name, team.matches, team.wins, team.draws, team.losses, team.points
+        )
+    }
+}
+
+enum MatchResult {
+    Win,
+    Draw,
+    Loss,
+}
+
+impl MatchResult {
+    fn reverse(&self) -> Self {
+        match self {
+            MatchResult::Win => MatchResult::Loss,
+            MatchResult::Draw => MatchResult::Draw,
+            MatchResult::Loss => MatchResult::Win,
         }
     }
 }
 
-impl Add for Score {
-    type Output = Score;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        let w = self.w + rhs.w;
-        let d = self.d + rhs.d;
-        let l = self.l + rhs.l;
-        let p = self.p + rhs.p;
-        Self { w, d, l, p }
+impl From<&str> for MatchResult {
+    fn from(value: &str) -> Self {
+        match value {
+            "win" => MatchResult::Win,
+            "loss" => MatchResult::Loss,
+            "draw" => MatchResult::Draw,
+            _ => unreachable!(),
+        }
     }
 }
 
-impl AddAssign for Score {
-    fn add_assign(&mut self, rhs: Self) {
-        self.w += rhs.w;
-        self.d += rhs.d;
-        self.l += rhs.l;
-        self.p += rhs.p;
-    }
-}
+const HEADER: &str = "Team                           | MP |  W |  D |  L |  P";
 
 pub fn tally(match_input: &str) -> String {
-    let init: HashMap<&str, Score> = HashMap::new();
-    let binding = match_input
-        .split("\n")
-        .map(|x| {
-            let result: Vec<&str> = x.split(";").collect();
-            result
-        })
+    let init: HashMap<_, _> = HashMap::new();
+    let scores = match_input
+        .lines()
+        .map(|x| x.split(";").collect::<Vec<_>>())
         .fold(init, |mut acc, cur| {
             if let [team1, team2, result] = cur[..] {
-                if result == "win" {
-                    let score = acc.entry(team1).or_default();
-                    *score += Score::winner();
-                    let score = acc.entry(team2).or_default();
-                    *score += Score::loser();
-                } else if result == "loss" {
-                    let score = acc.entry(team2).or_default();
-                    *score += Score::winner();
-                    let score = acc.entry(team1).or_default();
-                    *score += Score::loser();
-                } else {
-                    let score = acc.entry(team2).or_default();
-                    *score += Score::drawer();
-                    let score = acc.entry(team1).or_default();
-                    *score += Score::drawer();
-                }
+                let result = result.into();
+                acc.entry(team1.to_string())
+                    .or_insert(Team::new(team1))
+                    .add_match(&result);
+                acc.entry(team2.to_string())
+                    .or_insert(Team::new(team2))
+                    .add_match(&result.reverse());
             }
             acc
         });
-    let mut vecs: Vec<_> = binding.iter().collect();
-    vecs.sort_by(|a, b| b.1.p.cmp(&a.1.p).then_with(|| a.0.cmp(b.0)));
-    vecs.into_iter().fold(
-        String::from("Team                           | MP |  W |  D |  L |  P"),
-        |acc, cur| {
-            let (team, score) = cur;
-            let play = score.w.add(score.d).add(score.l).to_string();
-            let win = score.w.to_string();
-            let draw = score.d.to_string();
-            let lose = score.l.to_string();
-            let point = score.w.mul(3).add(score.d).to_string();
-            let arr = format!(
-                "{:31}|  {play} |  {win} |  {draw} |  {lose} |  {point}",
-                team
-            );
-            acc.add("\n").add(&arr)
-        },
-    )
+    let mut vecs: Vec<&Team> = scores.values().collect();
+    vecs.sort_by(|a, b| b.points.cmp(&a.points).then_with(|| a.name.cmp(&b.name)));
+    vec![HEADER.to_string()]
+        .into_iter()
+        .chain(vecs.into_iter().map(|v| v.into()))
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[cfg(test)]
